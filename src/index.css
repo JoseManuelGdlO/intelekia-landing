@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Intelekia Design System
+   Brand: Verde Intelekia + Azul marino oscuro
+   Tagline: Software inteligente, decisiones brillantes
+   All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 200 20% 98%;
+    --foreground: 205 60% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 205 60% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 205 60% 14%;
+
+    /* Verde Intelekia */
+    --primary: 152 68% 42%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 145 65% 55%;
+
+    /* Azul marino oscuro */
+    --secondary: 205 60% 14%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 200 20% 95%;
+    --muted-foreground: 205 20% 40%;
+
+    --accent: 152 68% 95%;
+    --accent-foreground: 152 68% 28%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 200 20% 90%;
+    --input: 200 20% 90%;
+    --ring: 152 68% 42%;
+
+    --radius: 1rem;
+
+    /* Brand gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(152 68% 42%), hsl(145 70% 55%));
+    --gradient-hero: radial-gradient(ellipse at top right, hsl(152 68% 42% / 0.18), transparent 60%),
+                     radial-gradient(ellipse at bottom left, hsl(145 70% 55% / 0.15), transparent 60%);
+    --gradient-cta: linear-gradient(135deg, hsl(152 68% 38%), hsl(145 70% 50%));
+
+    /* Brand shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(152 68% 42% / 0.12);
+    --shadow-glow: 0 10px 40px -10px hsl(152 68% 42% / 0.35);
+    --shadow-card: 0 2px 12px -2px hsl(205 60% 14% / 0.06);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 205 60% 8%;
+    --foreground: 200 20% 98%;
+    --card: 205 50% 12%;
+    --card-foreground: 200 20% 98%;
+    --popover: 205 50% 12%;
+    --popover-foreground: 200 20% 98%;
+    --primary: 152 68% 48%;
+    --primary-foreground: 205 60% 8%;
+    --secondary: 205 40% 20%;
+    --secondary-foreground: 200 20% 98%;
+    --muted: 205 40% 18%;
+    --muted-foreground: 200 20% 70%;
+    --accent: 152 50% 20%;
+    --accent-foreground: 152 68% 80%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 205 40% 20%;
+    --input: 205 40% 20%;
+    --ring: 152 68% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-gradient-brand {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-brand {
+    background: var(--gradient-primary);
+  }
+
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .shadow-brand {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+}
+
+/* Marquee animation for client logos */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
+}
+.marquee-pause:hover .animate-marquee-left,
+.marquee-pause:hover .animate-marquee-right {
+  animation-play-state: paused;
+}
+
+/* Floating blob animation */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+.animate-float {
+  animation: float-slow 6s ease-in-out infinite;
+}
