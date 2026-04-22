@@ -29,11 +29,11 @@ const Contact = () => {
             </p>
 
             <div className="mt-8 space-y-4">
-              <a href="mailto:direccion@inelekia.cloud" className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth">
+              <a href="mailto:direccion@intelekia.cloud" className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth">
                 <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
                   <Mail className="h-5 w-5" />
                 </div>
-                direccion@inelekia.cloud
+                direccion@intelekia.cloud
               </a>
               <a href="https://wa.me/526182327598" className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth">
                 <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">

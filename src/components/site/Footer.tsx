@@ -45,7 +45,7 @@ const Footer = () => {
         <div>
           <h4 className="font-semibold font-display">Contacto</h4>
           <ul className="mt-4 space-y-2 text-secondary-foreground/70">
-            <li>direccion@inelekia.cloud</li>
+            <li>direccion@intelekia.cloud</li>
             <li>Latinoamérica · Remoto</li>
             <li><a href="#contacto" className="hover:text-primary transition-smooth">Agenda una consultoría</a></li>
           </ul>
