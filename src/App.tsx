@@ -6,6 +6,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import TermsAndConditions from "./pages/TermsAndConditions.tsx";
+import AccountDeletion from "./pages/AccountDeletion.tsx";
 
 const App = () => (
   <TooltipProvider>
@@ -16,6 +17,7 @@ const App = () => (
         <Route path="/" element={<Index />} />
         <Route path="/privacidad" element={<PrivacyPolicy />} />
         <Route path="/terminos-y-condiciones" element={<TermsAndConditions />} />
+        <Route path="/eliminacion-de-cuenta" element={<AccountDeletion />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -61,6 +61,9 @@ const Footer = () => {
             <Link to="/terminos-y-condiciones" className="hover:text-primary transition-smooth">
               Terminos y condiciones
             </Link>
+            <a href="/eliminacion-de-cuenta.html" className="hover:text-primary transition-smooth">
+              Eliminacion de cuenta
+            </a>
             <span>Software inteligente, decisiones brillantes.</span>
           </div>
         </div>
