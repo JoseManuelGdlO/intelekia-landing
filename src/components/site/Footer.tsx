@@ -55,15 +55,15 @@ const Footer = () => {
         <div className="container py-5 text-sm text-secondary-foreground/60 flex flex-col md:flex-row gap-2 md:items-center justify-between">
           <span>© {new Date().getFullYear()} Intelekia. Todos los derechos reservados.</span>
           <div className="flex flex-wrap items-center gap-4">
-            <a href="/privacidad.html" className="hover:text-primary transition-smooth">
-              Privacidad de datos
-            </a>
+            <Link to="/privacidad-autobot" className="hover:text-primary transition-smooth">
+              Política de Privacidad
+            </Link>
             <a href="/terminos-y-condiciones.html" className="hover:text-primary transition-smooth">
               Terminos y condiciones
             </a>
-            <a href="/eliminacion-de-cuenta.html" className="hover:text-primary transition-smooth">
-              Eliminacion de cuenta
-            </a>
+            <Link to="/eliminacion-autobot" className="hover:text-primary transition-smooth">
+              Eliminación de cuenta
+            </Link>
             <span>Software inteligente, decisiones brillantes.</span>
           </div>
         </div>
