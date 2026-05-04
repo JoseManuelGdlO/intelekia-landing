@@ -15,10 +15,40 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="/favicon.png" />
+
+    <!-- Chatbot Button Styles -->
+    <style>
+      .chat-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        font-size: 24px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 9999;
+      }
+
+      .chat-btn:hover {
+        transform: scale(1.1);
+      }
+    </style>
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Chatbot Button -->
+    <a href="/chatbot/chat.html" class="chat-btn">
+      💬
+    </a>
   </body>
 </html>
