@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="icon/icons8-ai.svg">
+  <link rel="stylesheet" href="style.css/public.css">
+  <title>Conversacion Guardada</title>
+</head>
+<body>
+  <main class="chat-app">
+    <header class="chat-header">
+      <div class="brand">
+        <img src="image/mind.png" alt="Logo Conversación IA" class="logo">
+        <h1>AI Agente</h1>
+      </div>
+      <span class="status">Asistente en línea</span>
+    </header>
+
+    <section id="chatMessages" class="chat-messages" aria-label="Mensajes de la conversacion"></section>
+
+    <form id="chatForm" class="chat-footer">
+      <input id="messageInput" type="text" placeholder="Escribe tu mensaje..." required maxlength="240">
+      <button type="submit" class="send-btn">Enviar</button>
+      <button type="button" id="clearBtn" class="clear-btn">Borrar</button>
+    </form>
+  </main>
+
+  <script src="scrip.js"></script>
+</body>
+</html>
