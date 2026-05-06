@@ -155,8 +155,10 @@
 .animate-marquee-right {
   animation: marquee-right 30s linear infinite;
 }
-.marquee-pause:hover .animate-marquee-left,
-.marquee-pause:hover .animate-marquee-right {
+.marquee-track {
+  will-change: transform;
+}
+.marquee-track:hover {
   animation-play-state: paused;
 }
 

@@ -1,17 +1,43 @@
-const clientsRow1 = [
-  "Miaumiau",
-  "Saru Visass",
-  "Visas Transelite",
-  "Obras y Armados DGO",
-  "Odontopediatra Xochitl G de la O",
+import armoniiLogo from "@/assets/logos/armonii.jpeg";
+import tloLogo from "@/assets/logos/TLO.jpeg";
+import autobotLogo from "@/assets/logos/autobot.png";
+import asertoursLogo from "@/assets/logos/asertours.jpg";
+import enarmxLogo from "@/assets/logos/enarmx.png";
+import eventivaLogo from "@/assets/logos/Eventiva.png";
+import hanniLogo from "@/assets/logos/hanni.png";
+import miaumiuauLogo from "@/assets/logos/miaumiuau.jpeg";
+import mobifestLogo from "@/assets/logos/mobifest.png";
+import obrasyarmadosLogo from "@/assets/logos/obrasyarmados.png";
+import odontopediatraXoxLogo from "@/assets/logos/odontopediatraxox.png";
+import odontopediatraYomairaLogo from "@/assets/logos/odontopediatrayomaira.jpg";
+import saruvisasLogo from "@/assets/logos/saruvisas.jpeg";
+import transeliteLogo from "@/assets/logos/transelite.png";
+
+type Client = {
+  name: string;
+  logo: string;
+};
+
+const clients: Client[] = [
+  { name: "Miaumiuau", logo: miaumiuauLogo },
+  { name: "Saru Visas", logo: saruvisasLogo },
+  { name: "Visas Transelite", logo: transeliteLogo },
+  { name: "Obras y Armados DGO", logo: obrasyarmadosLogo },
+  { name: "Odontopediatra Xochitl G de la O", logo: odontopediatraXoxLogo },
+  { name: "Odontopediatra Yomaira Garcia Flores", logo: odontopediatraYomairaLogo },
+  { name: "Mobifest DGO", logo: mobifestLogo },
+  { name: "Armonii MX", logo: armoniiLogo },
+  { name: "Hanni Depilaciones Qto", logo: hanniLogo },
+  { name: "EnarMx Simulador Enarm", logo: enarmxLogo },
+  { name: "TLO Transportes Ligeros de Occidente GDL", logo: tloLogo },
+  { name: "EventivApp", logo: eventivaLogo },
+  { name: "AutoBot", logo: autobotLogo },
+  { name: "AserTours", logo: asertoursLogo },
 ];
-const clientsRow2 = [
-  "Odontopediatra Yomaira Garcia Flores",
-  "Mobifest DGO",
-  "Armonii MX",
-  "Hanni Depilaciones Qto",
-  "EnarMx Simulador Enarm"
-];
+
+const midpoint = Math.ceil(clients.length / 2);
+const clientsRow1 = clients.slice(0, midpoint);
+const clientsRow2 = clients.slice(midpoint);
 
 const stats = [
   { n: "+20", l: "clientes activos" },
@@ -19,9 +45,15 @@ const stats = [
   { n: "98%", l: "de satisfacción" },
 ];
 
-const LogoPill = ({ name }: { name: string }) => (
-  <div className="shrink-0 mx-4 px-8 py-5 rounded-2xl bg-card border border-border shadow-card flex items-center justify-center min-w-[180px] grayscale opacity-60 hover:opacity-100 hover:grayscale-0 hover:border-primary/40 transition-smooth">
-    <span className="font-display font-semibold text-lg text-secondary whitespace-nowrap">{name}</span>
+const LogoPill = ({ client }: { client: Client }) => (
+  <div className="logo-pill shrink-0 mx-4 px-6 py-4 rounded-2xl bg-card border border-border shadow-card flex items-center gap-4 min-w-[280px] grayscale opacity-70 hover:opacity-100 hover:grayscale-0 hover:border-primary/40 transition-smooth">
+    <img
+      src={client.logo}
+      alt={`Logo de ${client.name}`}
+      className="h-12 w-12 rounded-lg object-contain bg-white p-1"
+      loading="eager"
+    />
+    <span className="font-display font-semibold text-base text-secondary leading-tight">{client.name}</span>
   </div>
 );
 
@@ -40,18 +72,18 @@ const Clients = () => {
         </div>
 
         {/* Marquee rows */}
-        <div className="marquee-pause space-y-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="space-y-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           <div className="overflow-hidden">
-            <div className="flex w-max animate-marquee-left">
-              {[...clientsRow1, ...clientsRow1].map((c, i) => (
-                <LogoPill key={`r1-${i}`} name={c} />
+            <div className="marquee-track flex w-max animate-marquee-left">
+              {[...clientsRow1, ...clientsRow1].map((client, i) => (
+                <LogoPill key={`r1-${i}`} client={client} />
               ))}
             </div>
           </div>
           <div className="overflow-hidden">
-            <div className="flex w-max animate-marquee-right">
-              {[...clientsRow2, ...clientsRow2].map((c, i) => (
-                <LogoPill key={`r2-${i}`} name={c} />
+            <div className="marquee-track flex w-max animate-marquee-right">
+              {[...clientsRow2, ...clientsRow2].map((client, i) => (
+                <LogoPill key={`r2-${i}`} client={client} />
               ))}
             </div>
           </div>
