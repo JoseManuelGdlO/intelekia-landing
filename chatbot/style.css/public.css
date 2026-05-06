@@ -261,7 +261,7 @@
     }
   }
 
-  /* 🔥 Formato para contenido HTML del mensaje */
+  /* Formato para contenido HTML del mensaje */
 .message-content {
   font-size: 14px;
   line-height: 1.5;
@@ -295,4 +295,52 @@
 
 .message-content a:hover {
   text-decoration: underline;
+}
+
+/* Botón flotante (reposicionado para no interferir con el botón de React) */
+.chat-toggle-btn-fixed {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #10b981;
+  color: white;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 10000;
+  border: none;
+  transition: background 0.2s;
+}
+
+.chat-toggle-btn-fixed:hover {
+  transform: scale(1.1);
+}
+
+/* Panel del chat (pequeño) */
+.chat-widget-panel {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 360px;
+  height: 480px;
+  max-height: calc(100vh - 120px);
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 480px) {
+  .chat-widget-panel {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 80px;
+  }
 }
