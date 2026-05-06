@@ -46,7 +46,7 @@ const stats = [
 ];
 
 const LogoPill = ({ client }: { client: Client }) => (
-  <div className="logo-pill shrink-0 mx-4 px-6 py-4 rounded-2xl bg-card border border-border shadow-card flex items-center gap-4 min-w-[280px] grayscale opacity-70 hover:opacity-100 hover:grayscale-0 hover:border-primary/40 transition-smooth">
+  <div className="logo-pill shrink-0 mx-4 px-6 py-4 rounded-2xl bg-card border border-border shadow-card flex items-center gap-4 min-w-[280px] opacity-100 hover:border-primary hover:shadow-brand transition-smooth">
     <img
       src={client.logo}
       alt={`Logo de ${client.name}`}

@@ -2,9 +2,10 @@ import isotipo from "@/assets/intelekia-isotipo.png";
 
 const steps = [
   { n: "01", title: "Diagnóstico", desc: "Entendemos tu negocio, datos y oportunidades de IA." },
-  { n: "02", title: "Estrategia", desc: "Definimos roadmap, casos de uso y métricas de éxito." },
-  { n: "03", title: "Implementación", desc: "Construimos y desplegamos la solución de forma ágil." },
-  { n: "04", title: "Acompañamiento", desc: "Iteramos, escalamos y formamos a tu equipo." },
+  { n: "02", title: "Prototipo", desc: "Diseñamos tu prototipo para validar la solución antes de implementarla." },
+  { n: "03", title: "Estrategia", desc: "Definimos roadmap, casos de uso y métricas de éxito." },
+  { n: "04", title: "Implementación", desc: "Construimos y desplegamos la solución de forma ágil." },
+  { n: "05", title: "Acompañamiento", desc: "Iteramos, escalamos y formamos a tu equipo." },
 ];
 
 const Process = () => {
@@ -18,7 +19,7 @@ const Process = () => {
           </h2>
         </div>
 
-        <div className="relative grid md:grid-cols-4 gap-8">
+        <div className="relative grid md:grid-cols-5 gap-8">
           <div className="hidden md:block absolute top-8 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
           {steps.map((s) => (
             <div key={s.n} className="relative text-center">
