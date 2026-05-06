@@ -3,13 +3,38 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MessageCircle, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 const Contact = () => {
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("¡Gracias! Te contactaremos en menos de 24h.");
-    (e.target as HTMLFormElement).reset();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/direccion@intelekia.cloud", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("No se pudo enviar el formulario.");
+      }
+
+      toast.success("¡Gracias! Te contactaremos en menos de 24h.");
+      form.reset();
+    } catch {
+      toast.error("No se pudo enviar tu mensaje. Intenta por WhatsApp o correo directo.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,23 +83,26 @@ const Contact = () => {
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium text-secondary">Nombre</label>
-                <Input required placeholder="Tu nombre" className="mt-1 rounded-xl" />
+                <Input required name="nombre" placeholder="Tu nombre" className="mt-1 rounded-xl" />
               </div>
               <div>
                 <label className="text-sm font-medium text-secondary">Empresa</label>
-                <Input required placeholder="Tu empresa" className="mt-1 rounded-xl" />
+                <Input required name="empresa" placeholder="Tu empresa" className="mt-1 rounded-xl" />
               </div>
             </div>
             <div>
               <label className="text-sm font-medium text-secondary">Email</label>
-              <Input required type="email" placeholder="tu@empresa.com" className="mt-1 rounded-xl" />
+              <Input required name="email" type="email" placeholder="tu@empresa.com" className="mt-1 rounded-xl" />
             </div>
             <div>
               <label className="text-sm font-medium text-secondary">Mensaje</label>
-              <Textarea required rows={4} placeholder="¿En qué podemos ayudarte?" className="mt-1 rounded-xl resize-none" />
+              <Textarea required name="mensaje" rows={4} placeholder="¿En qué podemos ayudarte?" className="mt-1 rounded-xl resize-none" />
             </div>
-            <Button type="submit" size="lg" className="w-full bg-gradient-brand hover:opacity-90 rounded-xl text-base">
-              Enviar mensaje <Send className="ml-2 h-4 w-4" />
+            <input type="hidden" name="_subject" value="Nuevo lead desde intelekia.cloud" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
+            <Button type="submit" size="lg" disabled={isSubmitting} className="w-full bg-gradient-brand hover:opacity-90 rounded-xl text-base disabled:opacity-70">
+              {isSubmitting ? "Enviando..." : "Enviar mensaje"} <Send className="ml-2 h-4 w-4" />
             </Button>
           </form>
         </div>
