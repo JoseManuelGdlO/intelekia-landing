@@ -8,6 +8,7 @@ interface Message {
   text: string;
 }
 
+
 const STORAGE_KEY = 'intelekia_chat';
 
 export default function ChatWidget() {
@@ -43,9 +44,6 @@ useEffect(() => {
   return () => document.removeEventListener('click', handleClickOutside);
 }, [open]);
 
-
-
-
   // Scroll al último mensaje
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -61,7 +59,6 @@ useEffect(() => {
     setInput('');
     setIsTyping(true);
     
-
     try {
       const webhookUrl = 'https://intelekia-n8n.vvggha.easypanel.host/webhook/cc18297d-b988-475f-85f3-9a9290f2ebaf';
       const response = await fetch(webhookUrl, {
@@ -71,11 +68,9 @@ useEffect(() => {
           message: text,
         }),
       });
-
       if (!response.ok) throw new Error(`Error HTTP: ${response.status}`); 
 
 const htmlResponse = await response.text();
-
       setMessages(prev => [...prev, { type: 'other', text: htmlResponse }]);
     } catch (error) {
       console.error(error);
@@ -97,8 +92,7 @@ const htmlResponse = await response.text();
       <button
         onClick={() => setOpen(!open)}
         className="chat-toggle-btn-fixed"
-        aria-label={open ? 'Cerrar chat' : 'Abrir chat'}
-      >
+        aria-label={open ? 'Cerrar chat' : 'Abrir chat'}>
         {open ? '✕' : '💬'}
       </button>
 
@@ -113,7 +107,6 @@ const htmlResponse = await response.text();
               </div>
               <span className="status">Asistente en línea</span>
             </header>
-
             <section className="chat-messages" aria-label="Mensajes">
               {messages.map((msg, i) => (
                 <div key={i} className={`message ${msg.type}`}>
@@ -143,6 +136,7 @@ const htmlResponse = await response.text();
                 maxLength={240}
                 required
               />
+
               <button type="submit" className="send-btn">Enviar</button>
             </form>
           </main>
