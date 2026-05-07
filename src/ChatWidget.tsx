@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom'; // Asegúrate de tener react-router-dom
-import '../chatbot/public.css'; // reutilizas los estilos del chat
+import { useLocation } from 'react-router-dom'; 
+import '/chatbot/public.css'; 
+import ReactDOM from 'react-dom';
 
 interface Message {
   type: 'mine' | 'other';
@@ -21,6 +22,23 @@ export default function ChatWidget() {
     setOpen(false);
   }, [location.pathname]);
 
+    // Cerrar el chat al hacer clic fuera de él
+useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (!open) return;
+    const target = event.target as HTMLElement;
+    if (
+      target.closest('.chat-toggle-btn-fixed') ||
+      target.closest('.chat-widget-panel')
+    ) {
+      return;
+    }
+    setOpen(false);
+  };
+  document.addEventListener('click', handleClickOutside);
+  return () => document.removeEventListener('click', handleClickOutside);
+}, [open]);
+
   // Cargar mensajes guardados al montar
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -33,8 +51,8 @@ export default function ChatWidget() {
         }
       } catch {}
     }
-    // Mensaje de bienvenida inicial
-    setMessages([{ type: 'other', text: '¡Hola! Soy el asistente virtual de Intelekia. ¿En qué puedo ayudarte?' }]);
+  // Si no hay historial guardado o está vacío
+    setMessages([]);
   }, []);
 
   // Guardar mensajes en localStorage cada vez que cambien
@@ -49,7 +67,7 @@ export default function ChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = input.trim();
     if (!text) return;
@@ -57,19 +75,35 @@ export default function ChatWidget() {
     const newMessages: Message[] = [...messages, { type: 'mine', text }];
     setMessages(newMessages);
     setInput('');
+    
 
-    // Simular respuesta de IA (sustituye por llamada a tu API)
-    setTimeout(() => {
-      const iaResponse = '¡Gracias por tu mensaje! ¿En qué más puedo ayudarte?';
-      setMessages(prev => [...prev, { type: 'other', text: iaResponse }]);
-    }, 800);
+    try {
+      const webhookUrl = 'https://intelekia-n8n.vvggha.easypanel.host/webhook/cc18297d-b988-475f-85f3-9a9290f2ebaf';
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+        }),
+      });
+
+      if (!response.ok) throw new Error(`Error HTTP: ${response.status}`); 
+
+const htmlResponse = await response.text();
+
+      setMessages(prev => [...prev, { type: 'other', text: htmlResponse }]);
+    } catch (error) {
+      console.error(error);
+      setMessages(prev => [...prev, { type: 'other', text: 'Ocurrió un error al contactar al asistente.' }]);
+    }
   };
 
   const handleClear = () => {
-    setMessages([{ type: 'other', text: '¡Hola! Soy el asistente virtual de Intelekia. ¿En qué puedo ayudarte?' }]);
+    setMessages([]);
+    localStorage.removeItem(STORAGE_KEY);
   };
-
-  return (
+  
+  const widget = (
     <>
       {/* Botón flotante siempre visible */}
       <button
@@ -122,4 +156,5 @@ export default function ChatWidget() {
       )}
     </>
   );
+  return ReactDOM.createPortal(widget, document.body);
 }
