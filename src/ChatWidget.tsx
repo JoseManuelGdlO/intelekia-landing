@@ -14,6 +14,7 @@ export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -34,38 +35,21 @@ useEffect(() => {
       return;
     }
     setOpen(false);
+    setMessages([]);
+    setIsTyping(false);
+    localStorage.removeItem(STORAGE_KEY);
   };
   document.addEventListener('click', handleClickOutside);
   return () => document.removeEventListener('click', handleClickOutside);
 }, [open]);
 
-  // Cargar mensajes guardados al montar
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed.length > 0) {
-          setMessages(parsed);
-          return;
-        }
-      } catch {}
-    }
-  // Si no hay historial guardado o está vacío
-    setMessages([]);
-  }, []);
 
-  // Guardar mensajes en localStorage cada vez que cambien
-  useEffect(() => {
-    if (messages.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-    }
-  }, [messages]);
+
 
   // Scroll al último mensaje
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isTyping]);  // ← isTyping como dependencia adicional
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +59,7 @@ useEffect(() => {
     const newMessages: Message[] = [...messages, { type: 'mine', text }];
     setMessages(newMessages);
     setInput('');
+    setIsTyping(true);
     
 
     try {
@@ -95,11 +80,14 @@ const htmlResponse = await response.text();
     } catch (error) {
       console.error(error);
       setMessages(prev => [...prev, { type: 'other', text: 'Ocurrió un error al contactar al asistente.' }]);
+    }finally {
+      setIsTyping(false);
     }
   };
 
   const handleClear = () => {
     setMessages([]);
+    setIsTyping(false);            // ← nueva línea
     localStorage.removeItem(STORAGE_KEY);
   };
   
@@ -136,6 +124,13 @@ const htmlResponse = await response.text();
                   )}
                 </div>
               ))}
+              {isTyping && (
+  <div className="message other">
+    <div className="typing-indicator">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+)}
               <div ref={messagesEndRef} />
             </section>
 
@@ -149,7 +144,6 @@ const htmlResponse = await response.text();
                 required
               />
               <button type="submit" className="send-btn">Enviar</button>
-              <button type="button" className="clear-btn" onClick={handleClear}>Borrar</button>
             </form>
           </main>
         </div>
