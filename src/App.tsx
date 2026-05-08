@@ -9,12 +9,14 @@ import PrivacyAutobot from "./pages/PrivacyAutobot.tsx";
 import TermsAndConditions from "./pages/TermsAndConditions.tsx";
 import AccountDeletion from "./pages/AccountDeletion.tsx";
 import AccountDeletionAutobot from "./pages/AccountDeletionAutobot.tsx";
+import ChatWidget from "./ChatWidget.tsx";
 
 const App = () => (
   <TooltipProvider>
     <Toaster />
     <Sonner />
     <BrowserRouter>
+    <ChatWidget />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/privacidad" element={<PrivacyPolicy />} />
