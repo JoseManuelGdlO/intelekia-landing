@@ -96,6 +96,7 @@ const htmlResponse = await response.text();
         {open ? '✕' : '💬'}
       </button>
 
+
       {/* Panel del chat (solo visible si open === true) */}
       {open && (
         <div className="chat-widget-panel">
