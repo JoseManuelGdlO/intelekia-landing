@@ -180,12 +180,12 @@
   .send-btn {
     background: var(--mine);
     color: #fff;
-    min-width: 60px;
+    min-width: unset;
     background-color: #3FA486; 
     border: none;
     border-radius: 50%;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -193,6 +193,8 @@
     color: white;
     transition: background-color 0.2s ease;
     flex-shrink: 0;
+    padding: 0;
+    font-size: 0;
   } 
 
   .clear-btn {
