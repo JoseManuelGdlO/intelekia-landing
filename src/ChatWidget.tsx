@@ -10,6 +10,7 @@ interface Message {
 
 
 const STORAGE_KEY = 'intelekia_chat';
+const SESSION_KEY = 'intelekia_session_id';
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -18,6 +19,16 @@ export default function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
+// Obtener o crear session_id (para mantener el contexto en LangGraph)
+const getSessionId = (): string => {
+  let sessionId = localStorage.getItem(SESSION_KEY);
+  if (!sessionId) {
+    sessionId = `react_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem(SESSION_KEY, sessionId);
+  }
+  return sessionId;
+};
 
   // Cerrar el chat cada vez que cambie la ruta
   useEffect(() => {
@@ -60,21 +71,23 @@ useEffect(() => {
     setIsTyping(true);
     
     try {
-      const webhookUrl = 'https://intelekia-n8n.vvggha.easypanel.host/webhook/cc18297d-b988-475f-85f3-9a9290f2ebaf';
-      const response = await fetch(webhookUrl, {
+      const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: text,
+          session_id: getSessionId(),
         }),
       });
       if (!response.ok) throw new Error(`Error HTTP: ${response.status}`); 
 
-const htmlResponse = await response.text();
-      setMessages(prev => [...prev, { type: 'other', text: htmlResponse }]);
+const data = await response.json();
+const botReply = data.reply || 'Lo siento, no pude procesar tu mensaje'
+
+      setMessages(prev => [...prev, { type: 'other', text: botReply }]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { type: 'other', text: 'Ocurrió un error al contactar al asistente.' }]);
+      setMessages(prev => [...prev, { type: 'other', text: 'No se pudo conectar con el asistente. ¿El servidor LangGraph está corriendo?' }]);
     }finally {
       setIsTyping(false);
     }
@@ -112,8 +125,7 @@ const htmlResponse = await response.text();
               {messages.map((msg, i) => (
                 <div key={i} className={`message ${msg.type}`}>
                   {msg.type === 'other' ? (
-                    <div className="message-content" dangerouslySetInnerHTML={{ __html: msg.text }} />
-                  ) : (
+                 <div className="message-content">{msg.text}</div> ) : (
                     msg.text
                   )}
                 </div>
