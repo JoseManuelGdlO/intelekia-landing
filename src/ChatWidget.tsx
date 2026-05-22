@@ -126,7 +126,8 @@ const botReply = data.reply || 'Lo siento, no pude procesar tu mensaje'
               {messages.map((msg, i) => (
                 <div key={i} className={`message ${msg.type}`}>
                   {msg.type === 'other' ? (
-                 <div className="message-content">{msg.text}</div> ) : (
+                 <div className="message-content" dangerouslySetInnerHTML={{ __html: msg.text }} />
+                   ) : (
                     msg.text
                   )}
                 </div>
