@@ -77,9 +77,22 @@ const Contact = () => {
   const goBack = () => setStep(1);
 
   const onFinalSubmit = async (values: ContactFormValues) => {
-    const endpoint =
-      FORMSPREE_ENDPOINT?.trim() ||
-      (FORMSPREE_FORM_ID?.trim() ? `https://formspree.io/f/${FORMSPREE_FORM_ID.trim()}` : undefined);
+    const resolveFormspreeEndpoint = () => {
+      const rawEndpoint = FORMSPREE_ENDPOINT?.trim();
+      if (rawEndpoint) {
+        // Permite configurar:
+        // - endpoint completo: https://formspree.io/f/xxxx
+        // - o solo el path/id: f/xxxx o xxxx
+        if (/^https?:\/\//i.test(rawEndpoint)) return rawEndpoint;
+        const id = rawEndpoint.replace(/^f\//i, "").replace(/^\/f\//i, "").trim();
+        return id ? `https://formspree.io/f/${id}` : undefined;
+      }
+
+      const formId = FORMSPREE_FORM_ID?.trim();
+      return formId ? `https://formspree.io/f/${formId}` : undefined;
+    };
+
+    const endpoint = resolveFormspreeEndpoint();
 
     if (!endpoint) {
       toast.error("Configura Formspree: define `VITE_FORMSPREE_ENDPOINT` o `VITE_FORMSPREE_FORM_ID`.");
@@ -90,12 +103,24 @@ const Contact = () => {
       setIsSending(true);
 
       const formData = new FormData();
+      const servicesText = values.servicios.join(", ");
+      const privacyAccepted = values.aceptaPrivacidad ? "true" : "false";
+
+      // Envío “estándar” para Formspree (para minimizar problemas de mapeo de campos).
+      formData.append("name", values.nombre);
+      formData.append("company", values.empresa);
+      formData.append("email", values.email);
+      formData.append("services", servicesText);
+      formData.append("message", values.mensaje);
+      formData.append("accept_privacy", privacyAccepted);
+
+      // Compatibilidad con los nombres en español que ya se usaban en el formulario.
       formData.append("nombre", values.nombre);
       formData.append("empresa", values.empresa);
-      formData.append("email", values.email);
-      formData.append("servicios", values.servicios.join(", "));
+      formData.append("servicios", servicesText);
       formData.append("mensaje", values.mensaje);
-      formData.append("acepta_privacidad", values.aceptaPrivacidad ? "true" : "false");
+      formData.append("acepta_privacidad", privacyAccepted);
+      formData.append("privacy_accepted", privacyAccepted);
       formData.append("_subject", `Consulta de consultoría - ${values.nombre}`);
       formData.append("_replyto", values.email);
 
