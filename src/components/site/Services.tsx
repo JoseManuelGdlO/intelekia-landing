@@ -1,6 +1,6 @@
 import { Bot, Workflow, BarChart3, Cpu, Lightbulb, GraduationCap } from "lucide-react";
 
-const services = [
+export const services = [
   { icon: Bot, title: "Agentes de IA personalizados", desc: "Asistentes virtuales y agentes autónomos entrenados con tu información para automatizar tareas críticas." },
   { icon: Workflow, title: "Automatización inteligente", desc: "RPA combinado con IA para eliminar trabajo repetitivo y optimizar tus procesos end-to-end." },
   { icon: BarChart3, title: "Analítica de datos & BI", desc: "Dashboards y modelos predictivos que convierten tus datos en decisiones accionables." },

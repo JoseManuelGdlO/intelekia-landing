@@ -1,39 +1,124 @@
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MessageCircle, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
-import { FormEvent, useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { services } from "./Services";
+
+type ContactFormValues = {
+  nombre: string;
+  empresa: string;
+  email: string;
+  servicios: string[];
+  mensaje: string;
+  aceptaPrivacidad: boolean;
+};
+
+const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT as string | undefined;
+const FORMSPREE_FORM_ID = import.meta.env.VITE_FORMSPREE_FORM_ID as string | undefined;
 
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const serviceTitles = useMemo(() => services.map((s) => s.title), []);
+  const serviceSchema = useMemo(
+    () =>
+      z
+        .string()
+        .refine((v) => serviceTitles.includes(v), { message: "Servicio inválido" }),
+    [serviceTitles],
+  );
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
+  const schema = useMemo(
+    () =>
+      z.object({
+        nombre: z.string().min(1, { message: "Ingresa tu nombre" }),
+        empresa: z.string().min(1, { message: "Ingresa tu empresa" }),
+        email: z.string().email({ message: "Ingresa un email válido" }),
+        servicios: z.array(serviceSchema).min(1, { message: "Elige al menos un servicio" }),
+        mensaje: z.string().min(10, { message: "Cuéntanos un poco más (mín. 10 caracteres)" }),
+        aceptaPrivacidad: z.literal(true, { message: "Debes aceptar la política de privacidad" }),
+      }),
+    [serviceSchema],
+  );
 
-    setIsSubmitting(true);
+  const [step, setStep] = useState<1 | 2>(1);
+  const [isSending, setIsSending] = useState(false);
+
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      nombre: "",
+      empresa: "",
+      email: "",
+      servicios: [],
+      mensaje: "",
+      aceptaPrivacidad: false,
+    },
+    mode: "onTouched",
+  });
+
+  const { control, handleSubmit, trigger, reset } = form;
+
+  const progressValue = step === 1 ? 50 : 100;
+
+  const goNext = async () => {
+    const ok = await trigger(["nombre", "empresa", "email"]);
+    if (!ok) return;
+    setStep(2);
+  };
+
+  const goBack = () => setStep(1);
+
+  const onFinalSubmit = async (values: ContactFormValues) => {
+    const endpoint =
+      FORMSPREE_ENDPOINT?.trim() ||
+      (FORMSPREE_FORM_ID?.trim() ? `https://formspree.io/f/${FORMSPREE_FORM_ID.trim()}` : undefined);
+
+    if (!endpoint) {
+      toast.error("Configura Formspree: define `VITE_FORMSPREE_ENDPOINT` o `VITE_FORMSPREE_FORM_ID`.");
+      return;
+    }
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/direccion@intelekia.cloud", {
+      setIsSending(true);
+
+      const formData = new FormData();
+      formData.append("nombre", values.nombre);
+      formData.append("empresa", values.empresa);
+      formData.append("email", values.email);
+      formData.append("servicios", values.servicios.join(", "));
+      formData.append("mensaje", values.mensaje);
+      formData.append("acepta_privacidad", values.aceptaPrivacidad ? "true" : "false");
+      formData.append("_subject", `Consulta de consultoría - ${values.nombre}`);
+      formData.append("_replyto", values.email);
+
+      const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
         body: formData,
+        headers: { Accept: "application/json" },
+        mode: "cors",
       });
 
       if (!response.ok) {
-        throw new Error("No se pudo enviar el formulario.");
+        const maybeText = await response.text().catch(() => "");
+        throw new Error(maybeText || `Error HTTP ${response.status}`);
       }
 
       toast.success("¡Gracias! Te contactaremos en menos de 24h.");
-      form.reset();
-    } catch {
-      toast.error("No se pudo enviar tu mensaje. Intenta por WhatsApp o correo directo.");
+      reset();
+      setStep(1);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Ocurrió un error al enviar el formulario.";
+      toast.error(message);
     } finally {
-      setIsSubmitting(false);
+      setIsSending(false);
     }
   };
 
@@ -54,13 +139,19 @@ const Contact = () => {
             </p>
 
             <div className="mt-8 space-y-4">
-              <a href="mailto:direccion@intelekia.cloud" className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth">
+              <a
+                href="mailto:direccion@intelekia.cloud"
+                className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth"
+              >
                 <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
                   <Mail className="h-5 w-5" />
                 </div>
                 direccion@intelekia.cloud
               </a>
-              <a href="https://wa.me/526182327598" className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth">
+              <a
+                href="https://wa.me/526182327598"
+                className="flex items-center gap-3 text-primary-foreground/90 hover:text-primary-foreground transition-smooth"
+              >
                 <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
                   <MessageCircle className="h-5 w-5" />
                 </div>
@@ -75,36 +166,199 @@ const Contact = () => {
             </div>
           </div>
 
-          <form
-            onSubmit={onSubmit}
-            className="bg-card rounded-3xl p-8 shadow-brand space-y-4"
-          >
-            <h3 className="text-2xl font-bold text-secondary">Cuéntanos de tu proyecto</h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-secondary">Nombre</label>
-                <Input required name="nombre" placeholder="Tu nombre" className="mt-1 rounded-xl" />
+          <Form {...form}>
+            <form
+              onSubmit={handleSubmit(onFinalSubmit)}
+              className="bg-card rounded-3xl p-8 shadow-brand space-y-5"
+            >
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold text-secondary">Cuéntanos de tu proyecto</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>Paso {step} de 2</span>
+                    <span>{progressValue}%</span>
+                  </div>
+                  <Progress value={progressValue} />
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-secondary">Empresa</label>
-                <Input required name="empresa" placeholder="Tu empresa" className="mt-1 rounded-xl" />
+
+              {step === 1 && (
+                <div className="space-y-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <FormField
+                      control={control}
+                      name="nombre"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-secondary">Nombre</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Tu nombre" className="mt-1 rounded-xl" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={control}
+                      name="empresa"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-secondary">Empresa</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Tu empresa" className="mt-1 rounded-xl" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-secondary">Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="tu@empresa.com"
+                            type="email"
+                            className="mt-1 rounded-xl"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+
+              {step === 2 && (
+                <div className="space-y-5">
+                  <div>
+                    <div className="flex items-center justify-between gap-4">
+                      <h4 className="text-lg font-semibold text-secondary">Selecciona servicios</h4>
+                    </div>
+                    <FormField
+                      control={control}
+                      name="servicios"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="grid sm:grid-cols-2 gap-3 mt-3">
+                            {services.map((s) => {
+                              const checked = field.value?.includes(s.title) ?? false;
+                              return (
+                                <label
+                                  key={s.title}
+                                  className="flex items-start gap-3 rounded-xl border border-border bg-background/40 p-3 cursor-pointer hover:border-primary/30 transition-smooth"
+                                >
+                                  <Checkbox
+                                    checked={checked}
+                                    onCheckedChange={(v) => {
+                                      const current = field.value ?? [];
+                                      const next = v === true ? [...current, s.title] : current.filter((x) => x !== s.title);
+                                      field.onChange(next);
+                                    }}
+                                  />
+                                  <div>
+                                    <div className="text-sm font-medium text-secondary">{s.title}</div>
+                                    <div className="text-xs text-muted-foreground leading-relaxed">{s.desc}</div>
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={control}
+                    name="mensaje"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-secondary">Mensaje</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            rows={4}
+                            placeholder="¿En qué podemos ayudarte?"
+                            className="mt-1 rounded-xl resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={control}
+                    name="aceptaPrivacidad"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-start gap-3">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={(v) => field.onChange(v === true)}
+                              aria-label="Aceptar política de privacidad"
+                              className="mt-0.5"
+                            />
+                          </FormControl>
+                          <div className="text-sm text-muted-foreground leading-relaxed">
+                            Acepto la{" "}
+                            <Link to="/privacidad" className="text-secondary underline underline-offset-2 hover:text-primary transition-smooth">
+                              política de privacidad
+                            </Link>
+                            .
+                          </div>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                {step === 2 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1 rounded-xl"
+                    onClick={goBack}
+                    disabled={isSending}
+                  >
+                    Atrás
+                  </Button>
+                )}
+
+                {step === 1 ? (
+                  <Button
+                    type="button"
+                    size="lg"
+                    className="w-full bg-gradient-brand hover:opacity-90 rounded-xl text-base flex-1"
+                    onClick={goNext}
+                    disabled={isSending}
+                  >
+                    Continuar <Send className="ml-2 h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-gradient-brand hover:opacity-90 rounded-xl text-base flex-1"
+                    disabled={isSending}
+                  >
+                    {isSending ? "Enviando..." : "Enviar mensaje"} <Send className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
               </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-secondary">Email</label>
-              <Input required name="email" type="email" placeholder="tu@empresa.com" className="mt-1 rounded-xl" />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-secondary">Mensaje</label>
-              <Textarea required name="mensaje" rows={4} placeholder="¿En qué podemos ayudarte?" className="mt-1 rounded-xl resize-none" />
-            </div>
-            <input type="hidden" name="_subject" value="Nuevo lead desde intelekia.cloud" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
-            <Button type="submit" size="lg" disabled={isSubmitting} className="w-full bg-gradient-brand hover:opacity-90 rounded-xl text-base disabled:opacity-70">
-              {isSubmitting ? "Enviando..." : "Enviar mensaje"} <Send className="ml-2 h-4 w-4" />
-            </Button>
-          </form>
+            </form>
+          </Form>
         </div>
       </div>
     </section>
