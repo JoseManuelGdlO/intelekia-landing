@@ -22,7 +22,6 @@ type ContactFormValues = {
   aceptaPrivacidad: boolean;
 };
 
-const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT as string | undefined;
 const FORMSPREE_FORM_ID = import.meta.env.VITE_FORMSPREE_FORM_ID as string | undefined;
 
 const Contact = () => {
@@ -78,7 +77,7 @@ const Contact = () => {
 
   const onFinalSubmit = async (values: ContactFormValues) => {
     const endpoint =
-      FORMSPREE_ENDPOINT?.trim() ||
+    
       (FORMSPREE_FORM_ID?.trim() ? `https://formspree.io/f/${FORMSPREE_FORM_ID.trim()}` : undefined);
 
     if (!endpoint) {

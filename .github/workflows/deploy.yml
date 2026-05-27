@@ -34,6 +34,7 @@ jobs:
       - name: Build app
         env:
           VITE_BASE_PATH: /
+          VITE_FORMSPREE_FORM_ID: ${{ secrets.VITE_FORMSPREE_FORM_ID }}
         run: npm run build
 
       - name: Upload GitHub Pages artifact
