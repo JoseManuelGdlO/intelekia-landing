@@ -9,6 +9,7 @@ import PrivacyAutobot from "./pages/PrivacyAutobot.tsx";
 import TermsAndConditions from "./pages/TermsAndConditions.tsx";
 import AccountDeletion from "./pages/AccountDeletion.tsx";
 import AccountDeletionAutobot from "./pages/AccountDeletionAutobot.tsx";
+import Support from "./pages/Support.tsx";
 import ChatWidget from "./ChatWidget.tsx";
 
 const App = () => (
@@ -24,6 +25,7 @@ const App = () => (
         <Route path="/terminos-y-condiciones" element={<TermsAndConditions />} />
         <Route path="/eliminacion-de-cuenta" element={<AccountDeletion />} />
         <Route path="/eliminacion-autobot" element={<AccountDeletionAutobot />} />
+        <Route path="/soporte" element={<Support />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intelekia - Soporte</title>
+    <meta
+      name="description"
+      content="Centro de soporte oficial de Intelekia para sitio web y aplicaciones."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: #ffffff;
+        color: #0f172a;
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 48px 20px 64px;
+      }
+
+      h1 {
+        font-size: clamp(1.8rem, 3vw, 2.3rem);
+        margin: 0 0 8px;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+        margin-top: 28px;
+        margin-bottom: 8px;
+      }
+
+      p,
+      li {
+        color: #334155;
+      }
+
+      a {
+        color: #16a34a;
+      }
+
+      .muted {
+        color: #64748b;
+        margin-top: 0;
+      }
+
+      .channels {
+        display: grid;
+        gap: 12px;
+      }
+
+      @media (min-width: 640px) {
+        .channels {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .card {
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px;
+        background: #f8fafc;
+      }
+
+      .card strong {
+        display: block;
+        color: #0f172a;
+        margin-bottom: 4px;
+      }
+
+      details {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 12px 0;
+      }
+
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      details p {
+        margin: 8px 0 0;
+      }
+
+      form {
+        margin-top: 12px;
+        display: grid;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      input,
+      select,
+      textarea {
+        font: inherit;
+        padding: 10px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      button {
+        font: inherit;
+        font-weight: 600;
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        background: #16a34a;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button:hover {
+        opacity: 0.92;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Soporte Intelekia</h1>
+      <p class="muted">
+        Centro de ayuda para el sitio web y todas las aplicaciones de Intelekia. Usa esta
+        pagina como URL oficial de soporte en App Store y Google Play.
+      </p>
+
+      <h2>Canales de contacto</h2>
+      <div class="channels">
+        <div class="card">
+          <strong>Email</strong>
+          <a href="mailto:direccion@intelekia.cloud?subject=Soporte%20Intelekia">
+            direccion@intelekia.cloud
+          </a>
+        </div>
+        <div class="card">
+          <strong>WhatsApp</strong>
+          <a href="https://wa.me/526182327598" target="_blank" rel="noopener noreferrer">
+            618 232 7598
+          </a>
+        </div>
+        <div class="card">
+          <strong>Horario</strong>
+          Lun–Vie · 9:00–18:00 (hora México)
+        </div>
+      </div>
+
+      <h2>Apps y productos cubiertos</h2>
+      <p>Este soporte aplica, entre otras, a:</p>
+      <ul>
+        <li>AutoBot</li>
+        <li>EventivApp</li>
+        <li>EnarMx Simulador Enarm</li>
+        <li>Mobifest</li>
+        <li>Miaumiau</li>
+        <li>Saru Visas</li>
+        <li>Otras apps publicadas o mantenidas por Intelekia</li>
+      </ul>
+
+      <h2>Preguntas frecuentes</h2>
+      <details>
+        <summary>¿Cuánto tarda la respuesta de soporte?</summary>
+        <p>
+          Respondemos en un máximo de 24 horas hábiles (lunes a viernes). En WhatsApp suele
+          ser más rápido en horario de atención.
+        </p>
+      </details>
+      <details>
+        <summary>¿Cómo reporto un error en una app?</summary>
+        <p>
+          Indica el nombre de la app, una descripción del problema, capturas si es posible y
+          el correo o usuario con el que inicias sesión.
+        </p>
+      </details>
+      <details>
+        <summary>¿Cómo restablezco mi contraseña?</summary>
+        <p>
+          Usa la opción “Olvidé mi contraseña” dentro de la aplicación. Si no recibes el
+          correo, revisa spam o contáctanos indicando la app y tu email registrado.
+        </p>
+      </details>
+      <details>
+        <summary>¿Cómo solicito eliminar mi cuenta o mis datos?</summary>
+        <p>
+          Consulta
+          <a href="/eliminacion-de-cuenta.html">eliminación de cuenta</a>
+          o, para Autobot,
+          <a href="/eliminacion-autobot.html">eliminación Autobot</a>.
+        </p>
+      </details>
+
+      <h2>Enviar solicitud de soporte</h2>
+      <p>Completa el formulario; se abrirá tu cliente de correo con los datos listos.</p>
+      <form id="soporte-form">
+        <label>
+          Nombre
+          <input name="nombre" required placeholder="Tu nombre" />
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" required placeholder="tu@email.com" />
+        </label>
+        <label>
+          App
+          <select name="app" required>
+            <option value="">Selecciona la app</option>
+            <option>AutoBot</option>
+            <option>EventivApp</option>
+            <option>EnarMx Simulador Enarm</option>
+            <option>Mobifest</option>
+            <option>Miaumiau</option>
+            <option>Saru Visas</option>
+            <option>Otra app de Intelekia</option>
+          </select>
+        </label>
+        <label>
+          Mensaje
+          <textarea name="mensaje" rows="4" required placeholder="Describe el problema o tu consulta"></textarea>
+        </label>
+        <button type="submit">Enviar por correo</button>
+      </form>
+      <script>
+        document.getElementById("soporte-form").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var nombre = this.nombre.value.trim();
+          var email = this.email.value.trim();
+          var app = this.app.value;
+          var mensaje = this.mensaje.value.trim();
+          var subject = encodeURIComponent("[Soporte] " + app + " — " + nombre);
+          var body = encodeURIComponent(
+            "Nombre: " + nombre +
+            "\nEmail: " + email +
+            "\nApp: " + app +
+            "\n\nMensaje:\n" + mensaje
+          );
+          window.location.href =
+            "mailto:direccion@intelekia.cloud?subject=" + subject + "&body=" + body;
+        });
+      </script>
+
+      <p>
+        Políticas relacionadas:
+        <a href="/privacidad.html">Privacidad</a> ·
+        <a href="/eliminacion-de-cuenta.html">Eliminación de cuenta</a> ·
+        <a href="/terminos-y-condiciones.html">Términos</a>
+      </p>
+
+      <p>
+        Volver al sitio principal:
+        <a href="/">https://intelekia.cloud/</a>
+      </p>
+    </main>
+  </body>
+</html>

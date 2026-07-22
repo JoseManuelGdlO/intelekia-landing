@@ -55,6 +55,9 @@ const Footer = () => {
         <div className="container py-5 text-sm text-secondary-foreground/60 flex flex-col md:flex-row gap-2 md:items-center justify-between">
           <span>© {new Date().getFullYear()} Intelekia. Todos los derechos reservados.</span>
           <div className="flex flex-wrap items-center gap-4">
+            <a href="/soporte/" className="hover:text-primary transition-smooth">
+              Soporte
+            </a>
             <a href="/privacidad-autobot.html" className="hover:text-primary transition-smooth">
               Política de Privacidad
             </a>
