@@ -6,6 +6,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import PrivacyAutobot from "./pages/PrivacyAutobot.tsx";
+import PrivacyDescarte from "./pages/PrivacyDescarte.tsx";
 import TermsAndConditions from "./pages/TermsAndConditions.tsx";
 import AccountDeletion from "./pages/AccountDeletion.tsx";
 import AccountDeletionAutobot from "./pages/AccountDeletionAutobot.tsx";
@@ -22,6 +23,7 @@ const App = () => (
         <Route path="/" element={<Index />} />
         <Route path="/privacidad" element={<PrivacyPolicy />} />
         <Route path="/privacidad-autobot" element={<PrivacyAutobot />} />
+        <Route path="/descarte/privacidad" element={<PrivacyDescarte />} />
         <Route path="/terminos-y-condiciones" element={<TermsAndConditions />} />
         <Route path="/eliminacion-de-cuenta" element={<AccountDeletion />} />
         <Route path="/eliminacion-autobot" element={<AccountDeletionAutobot />} />
